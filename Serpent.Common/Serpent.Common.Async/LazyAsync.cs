@@ -15,6 +15,11 @@
             this.cachedValue = (Task<T>)null;
         }
 
+        public LazyAsync(T value)
+        {
+            this.cachedValue = Task.FromResult(value);
+        }
+
         /// <summary>
         /// Gets the value
         /// </summary>
