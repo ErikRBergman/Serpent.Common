@@ -19,6 +19,19 @@
             }
         }
 
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> sourceItems, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> equalityComparer)
+        {
+            var keysSeen = new HashSet<TKey>(equalityComparer);
+
+            foreach (var item in sourceItems)
+            {
+                if (keysSeen.Add(keySelector(item)))
+                {
+                    yield return item;
+                }
+            }
+        }
+
         public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> sourceItems)
         {
             return sourceItems.ToArray();
