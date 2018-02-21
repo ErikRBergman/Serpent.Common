@@ -17,7 +17,7 @@
 
         private readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1);
 
-        private readonly JsonSerializer serializer = new JsonSerializer()
+        private readonly JsonSerializer serializer = new JsonSerializer
                                                          {
                                                              Formatting = Formatting.Indented
                                                          };
@@ -25,18 +25,6 @@
         public JsonDiskServiceStorageService(JsonDiskServiceStorageServiceOptions<T> options)
         {
             this.filename = options.Filename;
-        }
-
-        public async Task<T> GetStorageAsync()
-        {
-            Stream memoryStream;
-
-            using (await this.semaphoreSlim.LockAsync())
-            {
-                memoryStream = await this.GetMemoryStreamFromFile();
-            }
-
-            return this.DeserializeStream(memoryStream);
         }
 
         public async Task<T> GetOrCreateStorageAsync(Func<T> func)
@@ -62,24 +50,16 @@
             }
         }
 
-        private async Task WriteStorageToFile(T storage)
+        public async Task<T> GetStorageAsync()
         {
-            var memoryStream = new MemoryStream(16 * 1024);
-            this.SerializeToStream(memoryStream, storage);
-            memoryStream.Position = 0;
+            Stream memoryStream;
 
-            using (var fileStream = File.Create(this.filename))
+            using (await this.semaphoreSlim.LockAsync())
             {
-                await memoryStream.CopyToAsync(fileStream);
+                memoryStream = await this.GetMemoryStreamFromFile();
             }
-        }
 
-        private void SerializeToStream(Stream memoryStream, T storage)
-        {
-            using (var writer = new StreamWriter(memoryStream, Encoding.Default, 4096, true))
-            {
-                this.serializer.Serialize(new JsonTextWriter(writer), storage);
-            }
+            return this.DeserializeStream(memoryStream);
         }
 
         public async Task UpdateStorageAsync(T storage)
@@ -114,6 +94,26 @@
             using (var fileStream = File.OpenRead(this.filename))
             {
                 return await fileStream.GetMemoryStreamCopyAsync();
+            }
+        }
+
+        private void SerializeToStream(Stream memoryStream, T storage)
+        {
+            using (var writer = new StreamWriter(memoryStream, Encoding.Default, 4096, true))
+            {
+                this.serializer.Serialize(new JsonTextWriter(writer), storage);
+            }
+        }
+
+        private async Task WriteStorageToFile(T storage)
+        {
+            var memoryStream = new MemoryStream(16 * 1024);
+            this.SerializeToStream(memoryStream, storage);
+            memoryStream.Position = 0;
+
+            using (var fileStream = File.Create(this.filename))
+            {
+                await memoryStream.CopyToAsync(fileStream);
             }
         }
     }

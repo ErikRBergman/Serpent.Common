@@ -35,6 +35,7 @@
 
                 Assert.IsNotNull(storage);
 
+                // ReSharper disable once PossibleInvalidOperationException
                 Assert.AreEqual(new DateTime(2001, 04, 01), storage.TimeStamp.Value);
             }
             finally

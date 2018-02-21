@@ -1,4 +1,5 @@
-﻿namespace Serpent.Common.Async
+﻿// ReSharper disable once CheckNamespace
+namespace Serpent.Common.Async
 {
     using System;
     using System.Threading.Tasks;

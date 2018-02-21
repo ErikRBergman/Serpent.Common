@@ -71,7 +71,9 @@
             }
         }
 
+#pragma warning disable 1998
         public async Task<Result<T>> ReadXmlFileAsync<T>(
+#pragma warning restore 1998
             Stream dataStream,
             string filename,
             T item,

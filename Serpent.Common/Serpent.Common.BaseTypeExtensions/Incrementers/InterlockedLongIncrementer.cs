@@ -4,7 +4,7 @@
 
     public class InterlockedLongIncrementer
     {
-        private long count = 0;
+        private long count;
 
         public long Count => this.count;
 

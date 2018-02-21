@@ -1,4 +1,5 @@
-﻿namespace Serpent.Common.BaseTypeExtensions.Collections
+﻿// ReSharper disable UnusedMember.Global
+namespace Serpent.Common.BaseTypeExtensions.Collections
 {
     using System.Collections.Generic;
 
@@ -19,7 +20,6 @@
             return @default;
         }
 
-
         public static T LastItem<T>(this IList<T> list, int indexFromTheEnd)
         {
             return list[list.Count - 1 - indexFromTheEnd];
@@ -29,6 +29,5 @@
         {
             list.RemoveAt(list.Count - 1);
         }
-
     }
 }

@@ -25,4 +25,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.1.*")]
 [assembly: InternalsVisibleTo("Serpent.Common.BaseTypeExtensions.Tests")]
 [assembly: InternalsVisibleTo("Serpent.Common.BaseTypeExtensions.Explorables")]
-
