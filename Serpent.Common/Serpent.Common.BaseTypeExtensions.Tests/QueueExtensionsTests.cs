@@ -71,7 +71,6 @@
             Assert.AreEqual(4, dequeued[0]);
             Assert.AreEqual(5, dequeued[1]);
             Assert.AreEqual(6, dequeued[2]);
-
         }
 
     }
