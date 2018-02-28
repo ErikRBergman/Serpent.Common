@@ -6,6 +6,32 @@
 
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// Creates a dictionary from a collection, ignoring duplicate keys
+        /// </summary>
+        /// <typeparam name="TKey">The key type</typeparam>
+        /// <typeparam name="TValue">The collection item type</typeparam>
+        /// <param name="collection">The collection</param>
+        /// <param name="keySelector">The key selector</param>
+        /// <param name="equalityComparer">An equality comparer</param>
+        /// <returns>The new dictionary</returns>
+        public static Dictionary<TKey, TValue> ToDictionarySafe<TKey, TValue>(this IEnumerable<TValue> collection, Func<TValue, TKey> keySelector, IEqualityComparer<TKey> equalityComparer = null)
+        {
+            var dictionary = new Dictionary<TKey, TValue>(equalityComparer ?? EqualityComparer<TKey>.Default);
+
+            foreach (var item in collection)
+            {
+                var key = keySelector(item);
+
+                if (!dictionary.ContainsKey(key))
+                {
+                    dictionary.Add(key, item);
+                }
+            }
+
+            return dictionary;
+        }
+
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> sourceItems, Func<TSource, TKey> keySelector)
         {
             var keysSeen = new HashSet<TKey>();
