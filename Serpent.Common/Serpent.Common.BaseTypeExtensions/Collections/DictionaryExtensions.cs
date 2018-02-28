@@ -10,6 +10,18 @@
             return dictionary.TryGetValue(key, out TValue value) ? value : @default;
         }
 
+        public static IDictionary<TKey, TValue> AddF<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            dictionary.Add(key, value);
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> AddF<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            dictionary.Add(key, value);
+            return dictionary;
+        }
+
         public static bool DoForKey<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Action<TKey, TValue> action)
         {
             if (dictionary.TryGetValue(key, out var value))
