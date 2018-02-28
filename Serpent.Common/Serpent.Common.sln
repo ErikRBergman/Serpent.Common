@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.BaseTypeExte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.BaseTypeExtensions.Tests", "Serpent.Common.BaseTypeExtensions.Tests\Serpent.Common.BaseTypeExtensions.Tests.csproj", "{22C7CE5D-A852-4EB4-AED1-92AD32EE36DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Async", "Serpent.Common.Async\Serpent.Common.Async.csproj", "{A681DB21-642D-4E05-812B-97D21E778D88}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Xml", "Serpent.Common.Xml\Serpent.Common.Xml.csproj", "{F04ED5AE-14DA-4B86-9FB3-7F636DA16512}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Stream", "Serpent.Common.Stream\Serpent.Common.Stream.csproj", "{6F567AFD-A1C8-435C-95E8-617E0DE4ECAC}"
@@ -23,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Rotators.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D8EE45D4-F1C9-44F2-856A-74711B47E2D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Async.NetStandard", "Serpent.Common.Async.NetStandard\Serpent.Common.Async.NetStandard.csproj", "{1CE1AB9A-5AE0-4A0D-B415-BC8C4241914A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serpent.Common.Async.NetStandard", "Serpent.Common.Async.NetStandard\Serpent.Common.Async.NetStandard.csproj", "{1CE1AB9A-5AE0-4A0D-B415-BC8C4241914A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +37,6 @@ Global
 		{22C7CE5D-A852-4EB4-AED1-92AD32EE36DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22C7CE5D-A852-4EB4-AED1-92AD32EE36DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22C7CE5D-A852-4EB4-AED1-92AD32EE36DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A681DB21-642D-4E05-812B-97D21E778D88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A681DB21-642D-4E05-812B-97D21E778D88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A681DB21-642D-4E05-812B-97D21E778D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A681DB21-642D-4E05-812B-97D21E778D88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F04ED5AE-14DA-4B86-9FB3-7F636DA16512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F04ED5AE-14DA-4B86-9FB3-7F636DA16512}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F04ED5AE-14DA-4B86-9FB3-7F636DA16512}.Release|Any CPU.ActiveCfg = Release|Any CPU

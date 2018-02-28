@@ -5,6 +5,18 @@ namespace Serpent.Common.BaseTypeExtensions.Collections
 
     public static class ListExtensions
     {
+        public static IList<T> AddF<T>(this IList<T> list, T item)
+        {
+            list.Add(item);
+            return list;
+        }
+
+        public static List<T> AddF<T>(this List<T> list, T item)
+        {
+            list.Add(item);
+            return list;
+        }
+
         public static T LastItem<T>(this IList<T> list)
         {
             return list[list.Count - 1];

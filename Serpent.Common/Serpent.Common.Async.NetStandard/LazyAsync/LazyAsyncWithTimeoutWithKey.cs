@@ -1,11 +1,14 @@
-﻿namespace Serpent.Common.Async
+﻿// ReSharper disable CheckNamespace
+namespace Serpent.Common.Async
 {
     using System;
     using System.Threading.Tasks;
 
-    public class LazyAsyncWithTimeout<T>
+    public class LazyAsyncWithTimeout<TKey, TValue>
     {
-        private readonly Func<Task<T>> loadValueFunc;
+        private readonly TKey key;
+
+        private readonly Func<TKey, Task<TValue>> loadValueFunc;
 
         private readonly object lockObject = new object();
 
@@ -13,12 +16,13 @@
 
         private readonly TimeSpan timeToLive;
 
-        private Task<T> value = Task.FromResult(default(T));
+        private Task<TValue> value = Task.FromResult(default(TValue));
 
         private DateTime loadTime = DateTime.MinValue;
 
-        public LazyAsyncWithTimeout(Func<Task<T>> loadValueFunc, TimeSpan timeToLive, bool resetTimeoutOnGet = true)
+        public LazyAsyncWithTimeout(TKey key, Func<TKey, Task<TValue>> loadValueFunc, TimeSpan timeToLive, bool resetTimeoutOnGet = true)
         {
+            this.key = key;
             this.loadValueFunc = loadValueFunc;
             this.timeToLive = timeToLive;
             this.resetTimeoutOnGet = resetTimeoutOnGet;
@@ -35,7 +39,7 @@
             }
         }
 
-        public Task<T> ValueAsync
+        public Task<TValue> ValueAsync
         {
             get
             {
@@ -45,7 +49,7 @@
                     if (this.value == null || now - this.loadTime > this.timeToLive)
                     {
                         this.loadTime = now;
-                        return this.value = this.loadValueFunc.Invoke();
+                        return this.value = this.loadValueFunc.Invoke(this.key);
                     }
 
                     if (this.resetTimeoutOnGet)
