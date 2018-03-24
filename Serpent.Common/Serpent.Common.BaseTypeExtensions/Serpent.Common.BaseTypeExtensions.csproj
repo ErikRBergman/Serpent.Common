@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Collections\ForEach\OnEachEnumerable.cs" />
+    <Compile Include="Collections\ForEach\OnEachEnumerator.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Collections\QueueExtensions.cs" />
     <Compile Include="Collections\ReadOnlyCollectionExtensions.cs" />

@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Serpent.Common.BaseTypeExtensions.Collections.ForEach;
+
     public static class EnumerableExtensions
     {
         /// <summary>
@@ -78,12 +80,28 @@
             return new Queue<T>(items);
         }
 
-        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+        /// <summary>
+        /// Executes an action on each item that passes through. 
+        /// Caution 1 - if the enumerable is iterated multiple times, the action will be called on each item every iteration
+        /// Caution 2 - if only parts of the enumerable is iterated, the action is only called on those items
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> OnEach<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            return new OnEachEnumerable<T>(items, action);
+        }
+
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
             foreach (var item in items)
             {
                 action(item);
             }
+
+            return items;
         }
     }
 }

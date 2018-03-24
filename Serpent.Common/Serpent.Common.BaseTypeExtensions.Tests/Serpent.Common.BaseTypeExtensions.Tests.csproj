@@ -52,6 +52,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForEachEnumerableTests.cs" />
     <Compile Include="QueueExtensionsTests.cs" />
     <Compile Include="DictionaryExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
