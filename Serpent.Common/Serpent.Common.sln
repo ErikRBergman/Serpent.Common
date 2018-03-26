@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serpent.Common.Async.NetStandard", "Serpent.Common.Async.NetStandard\Serpent.Common.Async.NetStandard.csproj", "{1CE1AB9A-5AE0-4A0D-B415-BC8C4241914A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.ServiceFabric.Common", "Serpent.ServiceFabric.Common\Serpent.ServiceFabric.Common.csproj", "{3128BCA9-D8AB-42AA-83B6-2DA3D37129B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{1CE1AB9A-5AE0-4A0D-B415-BC8C4241914A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CE1AB9A-5AE0-4A0D-B415-BC8C4241914A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CE1AB9A-5AE0-4A0D-B415-BC8C4241914A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3128BCA9-D8AB-42AA-83B6-2DA3D37129B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3128BCA9-D8AB-42AA-83B6-2DA3D37129B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3128BCA9-D8AB-42AA-83B6-2DA3D37129B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3128BCA9-D8AB-42AA-83B6-2DA3D37129B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
