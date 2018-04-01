@@ -123,5 +123,87 @@
 
             return defaultValue;
         }
+
+
+
+        public static double ToDoubleOrDefault(this string input, double defaultValue)
+        {
+            if (double.TryParse(input, out var value) == false)
+            {
+                return defaultValue;
+            }
+
+            return value;
+        }
+
+        public static double ToDoubleOrDefault(this string input, Func<double, bool> predicate, double defaultValue)
+        {
+            if (double.TryParse(input, out var value) == false || predicate(value) == false)
+            {
+                return defaultValue;
+            }
+
+            return value;
+        }
+
+        public static double? ToDoubleOrDefault(this string input, double? defaultValue = null)
+        {
+            if (double.TryParse(input, out var value) == false)
+            {
+                return defaultValue;
+            }
+
+            return value;
+        }
+
+        public static double? ToDoubleOrDefault(this string input, Func<double, bool> predicate, double? defaultValue = null)
+        {
+            if (double.TryParse(input, out var value) == false || predicate(value) == false)
+            {
+                return defaultValue;
+            }
+
+            return value;
+        }
+
+        public static DateTime ToDateTimeOrDefault(this string input, DateTime defaultValue)
+        {
+            if (!DateTime.TryParse(input, out var value))
+            {
+                return defaultValue;
+            }
+
+            return value;
+        }
+
+        public static DateTime? ToDateTimeOrDefaultNullable(this string input, DateTime? defaultValue = null)
+        {
+            if (!DateTime.TryParse(input, out var value))
+            {
+                return defaultValue;
+            }
+
+            return value;
+        }
+
+        public static DateTime ToDateTimeOrDefault(this string input, Func<DateTime, bool> predicate, DateTime defaultValue)
+        {
+            if (!DateTime.TryParse(input, out var value))
+            {
+                return defaultValue;
+            }
+
+            return predicate(value) ? value : defaultValue;
+        }
+
+        public static DateTime? ToDateTimeOrDefaultNullable(this string input, Func<DateTime, bool> predicate, DateTime? defaultValue = null)
+        {
+            if (!DateTime.TryParse(input, out var value))
+            {
+                return defaultValue;
+            }
+
+            return predicate(value) ? value : defaultValue;
+        }
     }
 }
