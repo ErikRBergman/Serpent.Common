@@ -103,6 +103,26 @@
             return dictionary;
         }
 
+        public static IDictionary<TKey, TValue> AddIfMissing<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary.Add(key, value);
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> AddIfMissing<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary.Add(key, value);
+            }
+
+            return dictionary;
+        }
+
         public static bool DoForKey<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Action<TKey, TValue> action)
         {
             if (dictionary.TryGetValue(key, out var value))
