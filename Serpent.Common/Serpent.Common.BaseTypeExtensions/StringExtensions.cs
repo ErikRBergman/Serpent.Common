@@ -124,8 +124,6 @@
             return defaultValue;
         }
 
-
-
         public static double ToDoubleOrDefault(this string input, double defaultValue)
         {
             if (double.TryParse(input, out var value) == false)

@@ -10,6 +10,87 @@
             return dictionary.TryGetValue(key, out TValue value) ? value : @default;
         }
 
+        public static IDictionary<TKey, TValue> AddRange<TKey, TValue, TOther>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector, Func<TOther, TValue> valueSelector)
+        {
+            foreach (var item in items)
+            {
+                dictionary.Add(keySelector(item), valueSelector(item));
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> AddRange<TKey, TValue, TOther>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector, Func<TOther, TValue> valueSelector)
+        {
+            foreach (var item in items)
+            {
+                dictionary.Add(keySelector(item), valueSelector(item));
+            }
+
+            return dictionary;
+        }
+
+        public static IDictionary<TKey, TValue> SetRange<TKey, TValue, TOther>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector, Func<TOther, TValue> valueSelector)
+        {
+            foreach (var item in items)
+            {
+                dictionary[keySelector(item)] = valueSelector(item);
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> SetRange<TKey, TValue, TOther>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector, Func<TOther, TValue> valueSelector)
+        {
+            foreach (var item in items)
+            {
+                dictionary[keySelector(item)] = valueSelector(item);
+            }
+
+            return dictionary;
+        }
+
+        public static IDictionary<TKey, TValue> RemoveRange<TKey, TValue, TOther>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector)
+        {
+            foreach (var item in items)
+            {
+                dictionary.Remove(keySelector(item));
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> RemoveRange<TKey, TValue, TOther>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector)
+        {
+            foreach (var item in items)
+            {
+                dictionary.Remove(keySelector(item));
+            }
+
+            return dictionary;
+        }
+
+
+        public static IDictionary<TKey, TValue> RemoveRange<TKey, TValue, TOther>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TKey> keys)
+        {
+            foreach (var key in keys)
+            {
+                dictionary.Remove(key);
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> RemoveRange<TKey, TValue, TOther>(this Dictionary<TKey, TValue> dictionary, IEnumerable<TKey> keys)
+        {
+            foreach (var key in keys)
+            {
+                dictionary.Remove(key);
+            }
+
+            return dictionary;
+        }
+
         public static IDictionary<TKey, TValue> AddF<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
             dictionary.Add(key, value);
