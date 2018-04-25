@@ -30,6 +30,47 @@
             return dictionary;
         }
 
+        public static IDictionary<TKey, TValue> AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
+        {
+            foreach (var item in items)
+            {
+                dictionary.Add(item.Key, item.Value);
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
+        {
+            foreach (var item in items)
+            {
+                dictionary.Add(item.Key, item.Value);
+            }
+
+            return dictionary;
+        }
+
+
+        public static IDictionary<TKey, TValue> SetRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
+        {
+            foreach (var item in items)
+            {
+                dictionary[item.Key] = item.Value;
+            }
+
+            return dictionary;
+        }
+
+        public static Dictionary<TKey, TValue> SetRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, IEnumerable<KeyValuePair<TKey, TValue>> items)
+        {
+            foreach (var item in items)
+            {
+                dictionary[item.Key] = item.Value;
+            }
+
+            return dictionary;
+        }
+
         public static IDictionary<TKey, TValue> SetRange<TKey, TValue, TOther>(this IDictionary<TKey, TValue> dictionary, IEnumerable<TOther> items, Func<TOther, TKey> keySelector, Func<TOther, TValue> valueSelector)
         {
             foreach (var item in items)
