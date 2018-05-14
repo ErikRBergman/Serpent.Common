@@ -17,6 +17,29 @@ namespace Serpent.Common.Async
             return ForEachAsync(items, workerFunc, concurrencyLevel, CancellationToken.None);
         }
 
+        public static async Task<IReadOnlyCollection<TResultItem>> ForEachAsync<TItem, TResultItem>(this IEnumerable<TItem> items, Func<TItem, Task<TResultItem>> workerFunc, int concurrencyLevel)
+        {
+            if (concurrencyLevel < 1)
+            {
+                throw new ArgumentException("concurrencyCount may not be less than 1");
+            }
+
+            var queue = new ConcurrentQueue<TItem>(items);
+            var result = new ConcurrentBag<TResultItem>();
+
+            await Task.WhenAll(Enumerable.Range(0, concurrencyLevel).Select(
+                v => ForEachAsyncWorker(
+                queue, 
+                async item =>
+                {
+                    var resultItem = await workerFunc(item);
+                    result.Add(resultItem);
+                }, 
+                CancellationToken.None)));
+
+            return result;
+        }
+
         public static Task ForEachAlternativeAsync<T>(this IEnumerable<T> items, Func<T, Task> workerFunc)
         {
             return Task.WhenAll(items.Select(item => Task.Run(() => workerFunc(item))));

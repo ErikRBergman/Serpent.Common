@@ -4,12 +4,14 @@
     <AssemblyName>Serpent.Common.Async</AssemblyName>
     <RootNamespace>Serpent.Common.Async</RootNamespace>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>1.1.0.2</Version>
+    <Version>1.1.0.3</Version>
     <Authors>erik.bergman</Authors>
     <Company>erik.bergman</Company>
     <Product />
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Copyright />
+    <PackageProjectUrl>https://github.com/ErikRBergman/Serpent.Common</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ErikRBergman/Serpent.Common</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.2.0" />
