@@ -27,7 +27,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.ServiceFabric.Actor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serpent.Common.BaseTypeExtensions.NetStandard", "Serpent.Common.BaseTypeExtensions.NetStandard\Serpent.Common.BaseTypeExtensions.NetStandard.csproj", "{F04A0B0C-BEE2-4416-9410-83AEDB75EB9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Async.Tests", "Serpent.Common.Async.Tests\Serpent.Common.Async.Tests.csproj", "{CA1F8414-920A-49C2-AE97-FC541B829C6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serpent.Common.Async.Tests", "Serpent.Common.Async.Tests\Serpent.Common.Async.Tests.csproj", "{CA1F8414-920A-49C2-AE97-FC541B829C6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serpent.Common.Xml.Tests", "Serpent.Common.Xml.Tests\Serpent.Common.Xml.Tests.csproj", "{146EC224-A47A-40E1-A84E-BC141A957546}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{CA1F8414-920A-49C2-AE97-FC541B829C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA1F8414-920A-49C2-AE97-FC541B829C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA1F8414-920A-49C2-AE97-FC541B829C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{146EC224-A47A-40E1-A84E-BC141A957546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{146EC224-A47A-40E1-A84E-BC141A957546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{146EC224-A47A-40E1-A84E-BC141A957546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{146EC224-A47A-40E1-A84E-BC141A957546}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

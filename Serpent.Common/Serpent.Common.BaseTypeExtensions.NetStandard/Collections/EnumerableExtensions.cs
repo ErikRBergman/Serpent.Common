@@ -5,9 +5,22 @@
     using System.Linq;
 
     using Serpent.Common.BaseTypeExtensions.Collections.ForEach;
+    using Serpent.Common.BaseTypeExtensions.Collections.Random;
 
     public static class EnumerableExtensions
     {
+        /// <summary>
+        /// Returns the collection in random order
+        /// </summary>
+        /// <typeparam name="T">The collection item type</typeparam>
+        /// <param name="collection">The collection to return in random order</param>
+        /// <param name="suffleCountPerItem">The number of times/item to shuffle the the collection</param>
+        /// <returns>The collection in random order</returns>
+        public static IEnumerable<T> RandomOrder<T>(this IEnumerable<T> collection, int suffleCountPerItem = 3)
+        {
+            return new RandomEnumerable<T>(collection, suffleCountPerItem);
+        }
+
         /// <summary>
         /// Creates a dictionary from a collection, ignoring duplicate keys
         /// </summary>
