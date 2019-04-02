@@ -203,5 +203,123 @@
 
             return predicate(value) ? value : defaultValue;
         }
+
+
+        /// <summary>
+        /// Converts the value to an integer or default value, if conversion is not possible
+        /// </summary>
+        /// <param name="value">The string to convert to integer</param>
+        /// <returns>The value</returns>
+        public static int ToInt(this string value)
+        {
+            if (int.TryParse(value, out var intValue))
+            {
+                return intValue;
+            }
+
+            return default(int);
+        }
+
+        /// <summary>
+        /// Converts the value to an integer or defaultValue, if conversion is not possible
+        /// </summary>
+        /// <param name="value">The string to convert to integer</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The value</returns>
+        public static int ToInt(this string value, int defaultValue)
+        {
+            if (int.TryParse(value, out var intValue))
+            {
+                return intValue;
+            }
+
+            return defaultValue;
+        }
+
+        /// <summary>
+        /// Converts the value to an integer or defaultValue, if conversion is not possible. The value must be at least minValue, or minValue is returned
+        /// </summary>
+        /// <param name="value">The string to convert to integer</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <param name="minValue">The minimum allowed value</param>
+        /// <returns>The value</returns>
+        public static int ToInt(this string value, int defaultValue, int minValue)
+        {
+            return value.ToIntOrDefault(defaultValue).Max(minValue);
+        }
+
+        /// <summary>
+        /// Converts the value to an integer or defaultValue, if conversion is not possible.
+        /// The value must be at least minValue or minValue is returned.
+        /// The value must be at most maxValue or maxValue is returned. 
+        /// </summary>
+        /// <param name="value">The string to convert to integer</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <param name="minValue">The minimum allowed value</param>
+        /// <param name="maxValue">The maximum allowed value</param>
+        /// <returns>The value</returns>
+        public static int ToInt(this string value, int defaultValue, int minValue, int maxValue)
+        {
+            return value.ToIntOrDefault(defaultValue).AtMost(maxValue).AtLeast(minValue);
+        }
+
+        /// <summary>
+        /// Converts the string to a time span, or default if conversion is not possible
+        /// </summary>
+        /// <param name="timeSpanText">The text to convert to timespan</param>
+        /// <returns>The timespan or default value</returns>
+        public static TimeSpan ToTimeSpan(this string timeSpanText)
+        {
+            if (TimeSpan.TryParse(timeSpanText, out var timeSpanValue))
+            {
+                return timeSpanValue;
+            }
+
+            return default(TimeSpan);
+        }
+
+        /// <summary>
+        /// Converts the string to a time span, or default if conversion is not possible. Value is adjusted to be between minValue and maxValue.
+        /// For example, if min=10 sec, max=40 sec and value = 400 sec, 40 sec is returned.
+        /// </summary>
+        /// <param name="timeSpanText">The text to convert to timespan</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <param name="minValue">The minimum value</param>
+        /// <param name="maxValue">The maximum value</param>
+        /// <returns>The timespan or default value</returns>
+        public static TimeSpan ToTimeSpan(this string timeSpanText, TimeSpan defaultValue, TimeSpan minValue, TimeSpan maxValue)
+        {
+            return timeSpanText.ToTimeSpanOrDefault(defaultValue).Max(minValue).Min(maxValue);
+        }
+
+        /// <summary>
+        /// Converts the string to a time span, or default if conversion is not possible. Value is adjusted to be at least minValue.
+        /// For example, if min=10 sec, and value = 1 sec, 10 sec is returned.
+        /// </summary>
+        /// <param name="timeSpanText">The text to convert to timespan</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <param name="minValue">The minimum value</param>
+        /// <returns>The timespan or default value</returns>
+        public static TimeSpan ToTimeSpan(this string timeSpanText, TimeSpan defaultValue, TimeSpan minValue)
+        {
+            return timeSpanText.ToTimeSpanOrDefault(defaultValue).Max(minValue);
+        }
+
+
+        /// <summary>
+        /// Converts the string to a time span, or default if conversion is not possible.
+        /// </summary>
+        /// <param name="timeSpanText">The text to convert to timespan</param>
+        /// <param name="defaultValue">The default value</param>
+        /// <returns>The timespan or default value</returns>
+        public static TimeSpan ToTimeSpan(this string timeSpanText, TimeSpan defaultValue)
+        {
+            if (TimeSpan.TryParse(timeSpanText, out var timeSpanValue))
+            {
+                return timeSpanValue;
+            }
+
+            return defaultValue;
+        }
     }
 }
