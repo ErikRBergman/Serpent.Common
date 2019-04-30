@@ -43,9 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetWildcardMappingResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultStatus.cs" />
+    <Compile Include="UtilityClasses\ImmutableDictionaryLight.cs" />
+    <Compile Include="UtilityClasses\ImmutableHashset.cs" />
+    <Compile Include="UtilityClasses\ImmutableThing.cs" />
+    <Compile Include="WildcardMapping.cs" />
+    <Compile Include="WildcardMatcher.cs" />
+    <Compile Include="WildcardMatcherContainer.cs" />
     <Compile Include="XmlFileParser.cs" />
     <Compile Include="XmlTextReaderExtensions.cs" />
   </ItemGroup>

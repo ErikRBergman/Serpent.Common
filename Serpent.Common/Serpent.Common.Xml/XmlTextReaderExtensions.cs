@@ -20,5 +20,10 @@
 
             return null;
         }
+
+        public static string ReadTextContent(this XmlTextReader xmlTextReader)
+        {
+            return !string.IsNullOrWhiteSpace(xmlTextReader.Value) ? xmlTextReader.Value : xmlTextReader.ReadContent();
+        }
     }
 }

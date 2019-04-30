@@ -18,6 +18,14 @@ namespace Serpent.Common.Xml
             this.Exception = exception;
         }
 
+        public Result(string inputFilename, ResultStatus status, T resultItem, Exception exception)
+        {
+            this.InputFilename = inputFilename;
+            this.Status = status;
+            this.ResultItem = resultItem;
+            this.Exception = exception;
+        }
+
         public Exception Exception { get; }
 
         public string InputFilename { get; }
@@ -25,5 +33,10 @@ namespace Serpent.Common.Xml
         public T ResultItem { get; }
 
         public ResultStatus Status { get; }
+
+        public Result<T> WithFilename(string filename)
+        {
+            return new Result<T>(filename, this.Status, this.ResultItem, this.Exception);
+        }
     }
 }

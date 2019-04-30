@@ -10,26 +10,113 @@ namespace Serpent.Common.Xml.Tests
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public async Task TestMethod1()
+        internal class ParseContext
         {
-            var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(this.xml));
+            public int ItemTitleCount { get; set; } = 0;
 
-            var reader = new XmlFileParser();
+            public int ItemPtiCount { get; set; } = 0;
 
-            var endElementDictionary = new Dictionary<string, Action<string>>();
-            endElementDictionary["/Product"] = s =>
+            public int EndOfProductCount { get; set; } = 0;
+
+            public string Title { get; set; }
+        }
+
+        [TestMethod]
+        public async Task TestFileParsing()
+        {
+            var stream = this.GetProductStream();
+
+            // Element
+            var elementDictionary = new Dictionary<string, Action<ParseContext, string>>
+            {
+                // Wildcard match
+                ["?/Product/Items/Item/ItemTitle."] = (ctx, title) =>
                 {
-                    var x = 1;
-                };
+                    if (ctx.ItemTitleCount < 2)
+                    {
+                        ctx.Title = ctx.Title ?? string.Empty;
+                        ctx.Title = ctx.Title + (ctx.Title.Length > 0 ? " " : string.Empty) + title;
+                    }
 
-            await reader.ReadXmlFileAsync<string>(
-                stream,
-                "crapto",
-                "x",
-                new Dictionary<string, Action<string, string>>(),
+                    ctx.ItemTitleCount++;
+                },
+                ["/Product/Items/Item/ItemPTI"] = (ctx, s1) =>
+                    {
+                        ctx.ItemPtiCount++;
+                    }
+            };
+
+            // End of element
+            var endElementDictionary = new Dictionary<string, Action<ParseContext>>
+            {
+                ["/Product"] = ctx =>
+                    {
+                        ctx.EndOfProductCount++;
+                    }
+            };
+
+
+            var reader = new XmlFileParser<ParseContext>(
+                 elementDictionary,
+                 endElementDictionary,
+                 (s, r) =>
+                     {
+                         if (s.StartsWith("/Product/Items/Item/ItemTextHead"))
+                         {
+                             var x = r.ReadElementContentAsString();
+                         }
+
+                         return true;
+                     });
+
+            var context = new ParseContext();
+
+            await reader.ReadXmlFileAsync(stream, context);
+
+            Assert.AreEqual("LINJELASER 2 LINJER DW088K-XJ MED NIVELLERINGSCYKLOP", context.Title);
+            Assert.AreEqual(context.ItemTitleCount, 2);
+            Assert.AreEqual(context.EndOfProductCount, 1);
+            Assert.AreEqual(context.ItemPtiCount, 1);
+        }
+
+
+        [TestMethod]
+        public async Task TestMultiParsing()
+        {
+
+            // Element
+            var elementDictionary = new Dictionary<string, Action<ParseContext, string>>
+            {
+                // Wildcard match
+                ["?/Product/Items/Item/ItemTitle."] = (ctx, title) =>
+                    {
+                        if (ctx.ItemTitleCount < 2)
+                        {
+                            ctx.Title = ctx.Title ?? string.Empty;
+                            ctx.Title = ctx.Title + (ctx.Title.Length > 0 ? " " : string.Empty) + title;
+                        }
+
+                        ctx.ItemTitleCount++;
+                    },
+                ["/Product/Items/Item/ItemPTI"] = (ctx, ptiData) =>
+                    {
+                        ctx.ItemPtiCount++;
+                    }
+            };
+
+            // End of element
+            var endElementDictionary = new Dictionary<string, Action<ParseContext>>
+            {
+                ["/Product"] = ctx =>
+                    {
+                        ctx.EndOfProductCount++;
+                    }
+            };
+
+            var reader = new XmlFileParser<ParseContext>(
+                elementDictionary,
                 endElementDictionary,
-                elementHandlerFunc: (s, r) =>
+                (s, r) =>
                     {
                         if (s.StartsWith("/Product/Items/Item/ItemTextHead"))
                         {
@@ -38,10 +125,26 @@ namespace Serpent.Common.Xml.Tests
 
                         return true;
                     });
+
+            var context = new ParseContext();
+
+            var multiplier = 10000;
+
+            for (int i = 0; i < multiplier; i++)
+            {
+                var stream = this.GetProductStream();
+                await reader.ReadXmlFileAsync(stream, context);
+            }
+
+            Assert.AreEqual(context.ItemTitleCount, multiplier * 2);
+            Assert.AreEqual(context.EndOfProductCount, multiplier * 1);
+            Assert.AreEqual(context.ItemPtiCount, multiplier * 1);
         }
 
-
-
+        private MemoryStream GetProductStream()
+        {
+            return new MemoryStream(System.Text.Encoding.UTF8.GetBytes(this.xml));
+        }
 
         private string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <Product id=""505603"" action=""updated"">
@@ -65,10 +168,11 @@ namespace Serpent.Common.Xml.Tests
       <ItemBygmaProductNumber><![CDATA[DW50]]></ItemBygmaProductNumber>
       <ItemEAN><![CDATA[5035048338575]]></ItemEAN>
       <ItemTitle1><![CDATA[LINJELASER 2 LINJER DW088K-XJ]]></ItemTitle1>
-      <ItemTitle2 />
+      <ItemTitle2><![CDATA[MED NIVELLERINGSCYKLOP]]></ItemTitle2>
       <ItemSupplierItemNumber><![CDATA[DW088K-XJ]]></ItemSupplierItemNumber>
       <ItemSupplierTitle1><![CDATA[LINJELASER, 2 LINJER]]></ItemSupplierTitle1>
-      <ItemSupplierTitle2 />
+      <ItemSupplierTitle2><![CDATA[LAZER BEAM]]></ItemSupplierTitle2>
+      <ItemSupplierTitle3 />
       <ItemBranch cvl=""CVLItemBranch"">
         <value><![CDATA[0]]></value>
         <value><![CDATA[98]]></value>
