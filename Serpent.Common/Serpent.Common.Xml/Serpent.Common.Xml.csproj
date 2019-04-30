@@ -44,11 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetWildcardMappingResult.cs" />
+    <Compile Include="ParseXmlException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultStatus.cs" />
+    <Compile Include="UtilityClasses\DictionaryExtensions.cs" />
     <Compile Include="UtilityClasses\ImmutableDictionaryLight.cs" />
-    <Compile Include="UtilityClasses\ImmutableHashset.cs" />
+    <Compile Include="UtilityClasses\ImmutableHashSet.cs" />
     <Compile Include="UtilityClasses\ImmutableThing.cs" />
     <Compile Include="WildcardMapping.cs" />
     <Compile Include="WildcardMatcher.cs" />

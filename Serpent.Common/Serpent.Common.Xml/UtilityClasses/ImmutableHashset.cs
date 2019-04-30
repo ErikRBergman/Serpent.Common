@@ -2,8 +2,13 @@
 {
     using System.Collections.Generic;
 
-    internal class ImmutableHashset<TType> : ImmutableThing<HashSet<TType>>
+    internal class ImmutableHashSet<TType> : ImmutableThing<HashSet<TType>>
     {
+        public ImmutableHashSet()
+            : base(new HashSet<TType>())
+        {
+        }
+
         public void Add(TType item)
         {
             this.Update(item, this.AddToHashSet);

@@ -14,6 +14,10 @@
     {
         private readonly Func<string, XmlTextReader, bool> elementHandlerFunc;
 
+        private readonly ImmutableHashSet<string> nonEndMatches = new ImmutableHashSet<string>();
+
+        private readonly ImmutableHashSet<string> nonMatches = new ImmutableHashSet<string>();
+
         private readonly WildcardMatcherContainer wildcardMatcherContainer = new WildcardMatcherContainer();
 
         private IReadOnlyDictionary<string, Action<TContextType, string>> elementMap;
@@ -24,9 +28,9 @@
 
         private ImmutableDictionaryLight<string, Action<TContextType>> endElementMapDictionary;
 
-        private bool useWildcardEndMapping;
+        private Action<TContextType, XmlTextReader, string> handleElementWildcardMappings;
 
-        private bool useWildcardMapping;
+        private bool useWildcardEndMapping;
 
         private IReadOnlyCollection<WildcardMapping<Action<TContextType>>> wildcardEndMappings;
 
@@ -48,8 +52,15 @@
         {
             using (var dataStream = await GetDataStreamAsync(filename))
             {
-                var result = await this.ReadXmlFileAsync(dataStream, item);
-                return result.WithFilename(filename);
+                try
+                {
+                    var result = await this.ReadXmlFileAsync(dataStream, item);
+                    return result.WithFilename(filename);
+                }
+                catch (Exception e)
+                {
+                    throw new ParseXmlException($"Error parsing file {filename}", filename, e);
+                }
             }
         }
 
@@ -59,80 +70,13 @@
             Stream dataStream,
             TContextType contextItem)
         {
-            try
-            {
-                this.ReadXmlStream(
-                    dataStream,
-                    (path, reader) =>
-                        {
-                            if (reader.IsEmptyElement == false)
-                            {
-                                if (this.elementMap.TryGetValue(path, out var action))
-                                {
-                                    action(contextItem, reader.ReadTextContent());
-                                }
-                                else
-                                {
-                                    if (this.useWildcardMapping)
-                                    {
-                                        foreach (var wildcardMapping in this.wildcardMappings)
-                                        {
-                                            if (wildcardMapping.WildcardMatcher.IsMatch(path))
-                                            {
-                                                // add to element map
-                                                this.elementMapDictionary.TryAdd(path, wildcardMapping.Action);
-                                                this.elementMap = this.elementMapDictionary.Value;
+            this.ReadXmlStream(dataStream, (path, reader) => this.ElementHandlerFunc(contextItem, reader, path), path => this.EndOfElementHandlerFunc(contextItem, path));
 
-                                                wildcardMapping.Action(contextItem, reader.ReadTextContent());
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+            return new Result<TContextType>(null, ResultStatus.Success, contextItem);
+        }
 
-                            if (this.elementHandlerFunc != null)
-                            {
-                                return this.elementHandlerFunc(path, reader);
-                            }
-
-                            return true;
-                        },
-                    path =>
-                        {
-                            if (this.endElementMap != null)
-                            {
-                                if (this.endElementMap.TryGetValue(path, out var action))
-                                {
-                                    action(contextItem);
-                                }
-                                else
-                                {
-                                    if (this.useWildcardEndMapping)
-                                    {
-                                        foreach (var wildcardMapping in this.wildcardEndMappings)
-                                        {
-                                            if (wildcardMapping.WildcardMatcher.IsMatch(path))
-                                            {
-                                                // add to element map
-                                                this.endElementMapDictionary.TryAdd(path, wildcardMapping.Action);
-                                                this.endElementMap = this.endElementMapDictionary.Value;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            return true;
-                        });
-
-                return new Result<TContextType>(null, ResultStatus.Success, contextItem);
-            }
-            catch (Exception exception)
-            {
-                return new Result<TContextType>(null, ResultStatus.Failure, exception);
-            }
+        private static void EmptyHandleElementWildcardMappings(TContextType arg1, XmlTextReader arg2, string arg3)
+        {
         }
 
         private void CreateWildcardEndMappings(IReadOnlyDictionary<string, Action<TContextType>> endElementMap)
@@ -143,7 +87,7 @@
             // Remove wildcard mappings from normal map
             if (endElementMap != null && this.wildcardEndMappings.Count > 0)
             {
-                endElementMap = endElementMap.Where(mapItem => !mapItem.Key.StartsWith("?")).ToDictionary(i => i.Key, i => i.Value);
+                endElementMap = endElementMap.Where(mapItem => !mapItem.Key.StartsWith("?")).ToDictionary();
             }
 
             this.endElementMap = endElementMap;
@@ -160,13 +104,112 @@
             // Remove wildcard mappings from normal map
             if (this.wildcardMappings.Count > 0)
             {
-                elementMap = elementMap.Where(mapItem => !mapItem.Key.StartsWith("?")).ToDictionary(i => i.Key, i => i.Value);
+                elementMap = elementMap.Where(mapItem => !mapItem.Key.StartsWith("?")).ToDictionary();
+                this.handleElementWildcardMappings = this.HandleElementWildcardMappings;
+            }
+            else
+            {
+                this.handleElementWildcardMappings = EmptyHandleElementWildcardMappings;
             }
 
-            this.useWildcardMapping = this.wildcardMappings.Count > 0;
             this.elementMapDictionary = new ImmutableDictionaryLight<string, Action<TContextType, string>>(elementMap);
 
             this.elementMap = elementMap;
+        }
+
+        private bool ElementHandlerFunc(TContextType contextItem, XmlTextReader reader, string path)
+        {
+            if (reader.IsEmptyElement == false)
+            {
+                // Is there an existing item in the element map for this path
+                if (this.elementMap.TryGetValue(path, out var action))
+                {
+                    action(contextItem, reader.ReadTextContent());
+                }
+                else
+                {
+                    this.handleElementWildcardMappings(contextItem, reader, path);
+                }
+            }
+
+            if (this.elementHandlerFunc != null)
+            {
+                return this.elementHandlerFunc(path, reader);
+            }
+
+            return true;
+        }
+
+        private bool EndOfElementHandlerFunc(TContextType contextItem, string path)
+        {
+            if (this.endElementMap != null)
+            {
+                if (this.endElementMap.TryGetValue(path, out var action))
+                {
+                    action(contextItem);
+                }
+                else
+                {
+                    this.HandleEndOfElementWildcardMapping(contextItem, path);
+                }
+            }
+
+            return true;
+        }
+
+        private void HandleEndOfElementWildcardMapping(TContextType contextItem, string path)
+        {
+            if (!this.useWildcardEndMapping)
+            {
+                return;
+            }
+
+            if (this.nonEndMatches.Contains(path))
+            {
+                return;
+            }
+
+            foreach (var wildcardMapping in this.wildcardEndMappings)
+            {
+                if (wildcardMapping.WildcardMatcher.IsMatch(path))
+                {
+                    // add to element map
+                    this.endElementMapDictionary.TryAdd(path, wildcardMapping.Action);
+                    this.endElementMap = this.endElementMapDictionary.Value;
+
+                    // execute the action
+                    wildcardMapping.Action(contextItem);
+
+                    return;
+                }
+            }
+
+            this.nonEndMatches.Add(path);
+        }
+
+        private void HandleElementWildcardMappings(TContextType contextItem, XmlTextReader reader, string path)
+        {
+            if (this.nonMatches.Contains(path))
+            {
+                return;
+            }
+
+            foreach (var wildcardMapping in this.wildcardMappings)
+            {
+                if (wildcardMapping.WildcardMatcher.IsMatch(path))
+                {
+                    // add to the element map to treat this path as it was added manually
+                    this.elementMapDictionary.TryAdd(path, wildcardMapping.Action);
+                    this.elementMap = this.elementMapDictionary.Value;
+
+                    // execute the action
+                    wildcardMapping.Action(contextItem, reader.ReadTextContent());
+
+                    return;
+                }
+            }
+
+            this.nonMatches.Add(path);
         }
     }
 
