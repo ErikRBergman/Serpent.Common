@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/ErikRBergman/Serpent.Common</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ErikRBergman/Serpent.Common</RepositoryUrl>
+    <Version>1.0.0.15</Version>
+    <FileVersion>1.0.0.15</FileVersion>
+    <AssemblyVersion>1.0.0.15</AssemblyVersion>
+  </PropertyGroup>
+</Project>

@@ -18,8 +18,10 @@ function updateNodeVersion
 
     $nodename = $versionNode.Name
 
-     $oldVersion = $versionNode.InnerText
+    $oldVersion = $versionNode.InnerText
+	
      $version = getUpdatedVersion $oldVersion
+	 
         
         if (-not $oldVersion.Equals($version))
         {
@@ -37,6 +39,11 @@ function updateNodeVersion
 function getUpdatedVersion
 {
     Param ([string] $version)
+
+	if ($oldVersion -eq "") {
+		return "1.0.0.0"
+		}
+
     $versionArray = $version.Split(".")
     if ($versionArray.Length -eq 4)
     {
@@ -45,6 +52,8 @@ function getUpdatedVersion
 
         return $version        
     }
+
+
 
     return $inputVerison
 }
@@ -122,7 +131,7 @@ function updateFileVersion
     if ($updatedVersion -eq $false)
     {
         Write-Host "Version not found in any propertygroup. Adding Version 0.0.0.1"
-        $version =  $xml.CreateElement("Version")
+        $version = $xml.CreateElement("Version")
         $version.InnerText = "0.0.0.1"
         $firstNonConditionalPropertyGroup.AppendChild($version)
         $wasUpdated = $true
